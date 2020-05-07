@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"strings"
 
 	"github.com/fatih/color"
 	"github.com/harmony-one/go-sdk/pkg/account"
@@ -52,7 +51,7 @@ func getPassphrase() (string, error) {
 		if err != nil {
 			return "", err
 		}
-		pw := strings.TrimSuffix(string(dat), "\n")
+		pw := string(dat)
 		return pw, nil
 	} else if userProvidesPassphrase {
 		fmt.Println("Enter passphrase:")
@@ -78,7 +77,7 @@ func getPassphraseWithConfirm() (string, error) {
 		if err != nil {
 			return "", err
 		}
-		pw := strings.TrimSuffix(string(dat), "\n")
+		pw := string(dat)
 		return pw, nil
 	} else if userProvidesPassphrase {
 		fmt.Println("Enter passphrase:")
