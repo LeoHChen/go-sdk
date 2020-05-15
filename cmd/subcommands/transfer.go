@@ -23,6 +23,7 @@ import (
 )
 
 const defaultTimeout = 40
+const defaultIntraTimeout = 10
 
 var (
 	fromAddress       oneAddress
@@ -128,7 +129,7 @@ func handlerForTransaction(txLog *transactionLog) error {
 	}
 
 	amt, err := common.NewDecFromString(amount)
-	if err != nil  {
+	if err != nil {
 		amtErr := fmt.Errorf("amount %w", err)
 		handlerForError(txLog, amtErr)
 		return amtErr
@@ -250,6 +251,11 @@ func handlerForBulkTransactions(txLog *transactionLog, index int) error {
 		gasLimit = *txnFlags.GasLimit
 	} else {
 		gasLimit = "" // Reset to default for subsequent transactions
+	}
+
+	// Wait for 10 sec for intra-shard transfer
+	if fromShardID == toShardID && timeout != defaultTimeout {
+		timeout = defaultIntraTimeout
 	}
 
 	return handlerForTransaction(txLog)
